@@ -15,10 +15,7 @@ Requirements:
 	#. matplotlib_ for plot.py_ usage
 
 Basic usage:
-	* integration (see lat.py_, integrate.py_):
-	
-	>>> python lat.py
-	>>> python plot.py out/f
+	* see lat.py_, integrate.py_, fit.py_
 
 __ http://github.com/neuton/gg-lat
 __ http://github.com
