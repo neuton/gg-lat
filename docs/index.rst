@@ -6,7 +6,7 @@ This is a documentation for `gg-lat`_ |GitHub|_.
 for the :math:`\gamma\gamma` scattering cross section fitting, extrapolation and integration.
 
 Source:
-	- Check out `the git repository`__ for the source codes (and these docs source) on `GitHub`__
+	- Check out the git repository for the source codes `on GitHub`__.
 	- Or read the Python sources `right here`__
 
 Requirements:
@@ -18,7 +18,6 @@ Basic usage:
 	* see lat.py_, integrate.py_, fit.py_
 
 __ http://github.com/neuton/gg-lat
-__ http://github.com
 __ _modules/index.html
 .. _GitHub: http://github.com/neuton/gg-lat
 .. |GitHub| image:: favicon-github-16.png
@@ -63,6 +62,8 @@ where :math:`k` is a mass of a system of 2 photons (see gg.py_)
 - `data/data.dat`_ --- data from `PDG`__
 - `data/pennington.dat`_ --- fit points for :math:`\pi^+ + \pi^-` channels from `Pennington's article`__
 - `data/full_data.dat`_ --- combined data from Pennington + PDG
+
+Note that in `data/pennington.dat`_ errors are added artificially simply for fitting to work.
 
 .. _data/data.dat: http://github.com/neuton/gg-lat/blob/master/data/data.dat
 .. _data/full_data.dat: http://github.com/neuton/gg-lat/blob/master/data/full_data.dat

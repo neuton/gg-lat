@@ -378,6 +378,8 @@ class ResonanceFit(FunctionFit):
 	
 	def form_factor_fraction(self):
 		r"""
+		default form-factor fraction:
+		
 		.. math:: \left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right| = 1
 		
 		Returns
