@@ -1,0 +1,2 @@
+include: pennington.dat
+plot: 1 2 label='Pennington, $\pi^+\pi^- +\, \pi^0\pi^0$'

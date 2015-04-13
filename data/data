@@ -1,0 +1,3 @@
+include: data.dat
+xylabel: GeV '$\mu b$'
+plot: 1 2 yerr=3 label=data linestyle=none marker=.
