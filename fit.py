@@ -737,6 +737,8 @@ class PiPiFit(FunctionFit):
 	a fit for the lowest order :math:`\pi^+\pi^-` decay cross-section in scalar QED.
 	
 	Without any fitting parameters.
+	
+	Also note that form-factors *are not included here*.
 	"""
 	def __init__(self):
 		FunctionFit.__init__(self)

@@ -35,6 +35,8 @@ def test_m_p(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	for a given :math:`M_\pi`, :math:`f_\pi`, :math:`M_\rho` and :math:`Q_1^2`
 	plot :math:`Q_2^2`-dependence of the amplitude compared to the lattice results.
 	
+	Note that Regge is not included here.
+	
 	Parameters
 	----------
 	M_pi : float
