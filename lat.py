@@ -103,7 +103,7 @@ def test_m_p(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 			out.write(r'xylabel: "$Q_2^2 \, [GeV^2]$" "$Re f - f_0$"' + '\n')
 			out.write('color: %s\n' % colors[i])
 			out.write('plot: 1 2 yerr=3 linestyle=None marker=s\n')
-			out.write(r'plot: 4 5 label="$\nu = %.3f$"' % nu + '\n')
+			out.write(r'plot: 4 5 label="$\nu : \; %.3f$"' % nu + '\n')
 			out.write('\n'.join(map('    '.join, values)))
 		plots.append('include: "nu_%.3f"' % nu)
 	
