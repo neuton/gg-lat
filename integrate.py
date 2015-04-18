@@ -192,15 +192,15 @@ class Region:
 		
 		Returns
 		-------
-		float
-			value of Re(f(k)-f(0))
+		tuple
+			value of Re(f(k)-f(0)), some error
 		
 		Notes
 		-----
 		Divergency extraction is done here (when :math:`\nu` is close enough to threshold):
 		
 		.. math:: I = \frac{8\nu^2}{\pi} \left(\int_{\nu_{min}}^{\nu_{max}} \frac{(a(\nu') - a(\nu))}{(\nu'^2-\nu^2)} d\nu' \; + \;
-			\frac{a(\nu)}{2\nu} \ln\left|\frac{\nu'-\nu}{\nu'+\nu}\right|\right),
+			\frac{a(\nu)}{2\nu} \ln\left|\frac{\nu'-\nu}{\nu'+\nu}\right| \Big|_{\nu_{min}}^{\nu_{max}} \right),
 		
 		where
 		
@@ -219,7 +219,8 @@ class Region:
 			singular = lambda p: 0. if p == inf else log(abs((p-nu)/(p+nu)))/(2*nu)
 			r, err = quad(lambda p: (a(p) - a_nu)/(p**2 - nu**2), nu0, nu1)[:2]
 			r +=  a_nu * (singular(nu1) - singular(nu0))
-		return 8 * nu**2 * r / (pi * 10**4 * hc**2), err # don't forget to convert units
+		prefactor = 8 * nu**2 / (pi * 10**4 * hc**2) # don't forget to convert units
+		return prefactor * r, prefactor * err
 	
 	def plot_cs(self, xmin=None, xmax=None, filename=None, dx=None, var='k', color=None, raw=False, logx=False):
 		"""
@@ -522,8 +523,8 @@ class Pi0(Region):
 		
 		Returns
 		-------
-		float
-			value of Re(f(k)-f(0))
+		tuple
+			value of Re(f(k)-f(0)), 0.
 		"""
 		mon_m = 0.776 # monopole mass parameter
 		nu = gg.k2nu(k)
@@ -564,8 +565,8 @@ class EtaPrime(Region):
 		
 		Returns
 		-------
-		float
-			value of Re(f(k)-f(0))
+		tuple
+			value of Re(f(k)-f(0)), 0.
 		"""
 		m = 0.95766 # physical mass
 		mon_m = 0.859 # monopole mass parameter
