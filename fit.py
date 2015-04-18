@@ -435,7 +435,7 @@ class ResonanceFit(FunctionFit):
 			\frac{1}{2} 16\pi \;
 			\frac{\Gamma_{tot}}{(s - m^2)^2 + m^2\Gamma_{tot}^2} \;
 			(2J + 1) \Gamma_{\gamma\gamma} \; \cdot \; \mathrm{k\_factor} \; \cdot \;
-			\left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right| \;\;\;\;\; [\mu b]
+			\left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right|^2 \;\;\;\;\; [\mu b]
 		
 		Parameters
 		----------
@@ -450,7 +450,7 @@ class ResonanceFit(FunctionFit):
 			fit function value at specified `k` with (optionally) specified parameters, in :math:`[\mu b]`
 		"""
 		p = self.full_p(p)
-		return self.fall_off(k, *p) * (2*self.J + 1) * self.breit_wigner(k, *p) * self.shift_W_gg(*p) * self.k_factor(*p) * self.form_factor_fraction()
+		return self.fall_off(k, *p) * (2*self.J + 1) * self.breit_wigner(k, *p) * self.shift_W_gg(*p) * self.k_factor(*p) * self.form_factor_fraction()**2
 	
 	def get_p(self):
 		return self.m, self.W_tot, self.W_gg
