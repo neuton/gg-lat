@@ -325,7 +325,7 @@ class ResonanceFit(FunctionFit):
 			\mathrm{for} \;\; 4M_{\pi}^2 < s < (m^2 + 4M_{\pi}^2)/2 \; ,
 		.. math:: f(s) = 1 \;\;\;\;\;\; \mathrm{for} \;\; s \ge (m^2 + 4M_{\pi}^2)/2 \; ,
 		
-		To be multiplied by a Breit-Weigner resonance, so that it will be zero below 2-pion production threshold.
+		To be multiplied by a Breit-Wigner resonance, so that it will be zero below 2-pion production threshold.
 		
 		Parameters
 		----------
@@ -353,9 +353,9 @@ class ResonanceFit(FunctionFit):
 			numpy.seterr(all='warn')
 			return r
 	
-	def breit_weigner(self, k, *p):
+	def breit_wigner(self, k, *p):
 		r"""
-		a function of a relativistic Breit-Weigner form (multiplied by some convinience factor):
+		a function of a relativistic Breit-Wigner form (multiplied by some convinience factor):
 		
 		.. math:: \frac{1}{2} 16\pi \frac{\Gamma_{tot}}{(s - m^2)^2 + m^2\Gamma_{tot}^2} \;\; [\mu b / GeV]
 		
@@ -450,7 +450,7 @@ class ResonanceFit(FunctionFit):
 			fit function value at specified `k` with (optionally) specified parameters, in :math:`[\mu b]`
 		"""
 		p = self.full_p(p)
-		return self.fall_off(k, *p) * (2*self.J + 1) * self.breit_weigner(k, *p) * self.shift_W_gg(*p) * self.k_factor(*p) * self.form_factor_fraction()
+		return self.fall_off(k, *p) * (2*self.J + 1) * self.breit_wigner(k, *p) * self.shift_W_gg(*p) * self.k_factor(*p) * self.form_factor_fraction()
 	
 	def get_p(self):
 		return self.m, self.W_tot, self.W_gg
@@ -742,6 +742,20 @@ class PiPiFit(FunctionFit):
 	"""
 	def __init__(self):
 		FunctionFit.__init__(self)
+		#self.mon_m = 0.776 # GeV
+	
+	#def form_factor_fraction(self):
+	#	r"""
+	#	squared monopole-form form-factor fraction:
+	#	
+	#	.. math:: \left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right|^2 = \left( \frac{1}{1 + Q_1^2/\Lambda^2} \cdot \frac{1}{1 + Q_2^2/\Lambda^2} \right)^2
+	#	
+	#	Returns
+	#	-------
+	#	float
+	#		squared form-factor fraction
+	#	"""
+	#	return ( 1. / (1 + gg.Q1/self.mon_m**2) / (1 + gg.Q2/self.mon_m**2) )**2
 	
 	def f(self, k):
 		r"""
@@ -766,4 +780,4 @@ class PiPiFit(FunctionFit):
 			a = X*(1 - 4*m2/s)/nu**2
 			L = log((1 + a**0.5)/(1 - a)**0.5)
 			r = (a**0.5*(2 - a - (1 - 2*X/(s*nu))**2) - (1-a)*(3 + a - 4*X/(nu*s))*L) * s2*nu**3/X**3
-			return r * (10**4*hc**2*alpha**2*pi/4)
+			return r * (10**4*hc**2*alpha**2*pi/4)# * self.form_factor_fraction()
