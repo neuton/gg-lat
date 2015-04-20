@@ -584,8 +584,9 @@ class TensorResonanceFit(ResonanceFit):
 	W_gg : float
 		*physical* :math:`\gamma\gamma` decay width of the resonance (:math:`\Gamma_{\gamma\gamma}`), [GeV] --- initial fitting parameter
 	"""
-	def __init__(self, m, W_tot, W_gg):
+	def __init__(self, m, W_tot, W_gg, mon_m=inf):
 		ResonanceFit.__init__(self, 0, m, W_tot, W_gg)
+		self.mon_m = mon_m
 	
 	def k_factor(self, *p):
 		r"""
@@ -610,6 +611,19 @@ class TensorResonanceFit(ResonanceFit):
 		nu0 = gg.s2nu(m**2)
 		X0 = gg.nu2X(nu0)
 		return 2 * nu0**2 / (m**2 * X0**0.5) + 8*X0**1.5/m**6
+	
+	def form_factor_fraction(self):
+		r"""
+		monopole-form form-factor fraction:
+		
+		.. math:: \left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right| = \frac{1}{1 + Q_1^2/\Lambda^2} \cdot \frac{1}{1 + Q_2^2/\Lambda^2}
+		
+		Returns
+		-------
+		float
+			form-factor fraction
+		"""
+		return 1. / (1 + gg.Q1/self.mon_m**2) / (1 + gg.Q2/self.mon_m**2)
 
 
 
@@ -617,15 +631,15 @@ class TensorResonanceFit(ResonanceFit):
 
 class f0_500(ScalarResonanceFit):
 	def __init__(self, m=0.5, W_tot=0.5, W_gg=2.05*10**-6):
-		ScalarResonanceFit.__init__(self, m, W_tot, W_gg)
+		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 class f0_980(ScalarResonanceFit):
 	def __init__(self, m=0.998, W_tot=0.042, W_gg=0.32*10**-6):
-		ScalarResonanceFit.__init__(self, m, W_tot, W_gg)
+		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 class f0_1370(ScalarResonanceFit):
 	def __init__(self, m=1.44, W_tot=0.4, W_gg=4.*10**-6):
-		ScalarResonanceFit.__init__(self, m, W_tot, W_gg)
+		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 
 # axial vector resonances:
@@ -643,17 +657,17 @@ class f1_1420(AxialVectorResonanceFit):
 
 class a2_1320(TensorResonanceFit):
 	def __init__(self, m=1.313, W_tot=0.107, W_gg=1.04*10**-6):
-		TensorResonanceFit.__init__(self, m, W_tot, W_gg)
+		TensorResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 class f2_1270(TensorResonanceFit):
 	def __init__(self, m=1.27, W_tot=0.1851, W_gg=0.5 * (3.49 + 2.93)*10**-6):
-		TensorResonanceFit.__init__(self, m, W_tot, W_gg)
+		TensorResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 
 
 class ResonanceRegionFit(FunctionFit):
 	r"""
-	a compound fit for all included resonances + background for the resonance region.
+	a compound fit for all included resonances + :math:`\pi^+\pi^-` background for the resonance region.
 	
 	Currently includes:
 	
