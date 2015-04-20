@@ -48,6 +48,7 @@ def test_m_p(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	Q1 : float
 		:math:`Q_1^2`
 	out_dir : str, optional
+		root output directory
 	
 	Examples
 	--------
@@ -63,6 +64,7 @@ def test_m_p(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	
 	"""
 	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1 = M_pi, f_pi, M_rho, Q1
+	#w = TensorMesonRegion(mon_m=0.8) + EtaPrime() + Pi0()
 	w = WholeRegion(add_regge=False)
 	
 	filename = 'm_%.3f__p_%.3f' % (M_pi, Q1)
@@ -86,7 +88,7 @@ def test_m_p(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 		
 		w_res = []
 		Q2_min = 2*nu - gg.M_pi**2 - gg.Q1 + 0.1
-		Q2_max = 5.
+		Q2_max = 6.
 		for gg.Q2 in arange(Q2_min, Q2_max, 0.1):
 			w_res.append([gg.Q2] + list(w.integral_f(gg.nu2k(nu))))
 		
@@ -111,6 +113,62 @@ def test_m_p(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	
 	with open(os.path.join(out_dir, 'out_'+filename, 'f'), 'w') as out:
 		out.write('\n'.join(plots))
+
+
+def test_cs(M_pi, f_pi, M_rho, Q1, out_dir='out'):
+	r"""
+	plot cross sections for a given :math:`M_\pi`, :math:`f_\pi`, :math:`M_\rho` and :math:`Q_1^2`
+	and for a set of :math:`Q_2^2` from corresponding lattice data file.
+	
+	Parameters
+	----------
+	M_pi : float
+		pion mass
+	f_pi : float
+		pion decay constant
+	M_rho : float
+		:math:`\rho`-meson mass
+	Q1 : float
+		:math:`Q_1^2`
+	out_dir : str, optional
+		root output directory
+	
+	Examples
+	--------
+	
+	.. code-block:: python
+	
+		from lat.py import test_cs
+		test_cs(0.451, 0.119, 0.952, 0.093)
+	
+	run and wait for a while; then plot results:
+	
+	>>> python plot.py out/test_cs/m_0.451__p_0.093
+	
+	"""
+	make_sure_path_exists(out_dir)
+	w = WholeRegion(add_regge=True)
+	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1 = M_pi, f_pi, M_rho, Q1
+	
+	filename = 'm_%.3f__p_%.3f' % (M_pi, Q1)
+	with open(os.path.join(out_dir, filename+'.dat')) as p:
+		data = [map(float, l.split()) for l in p]
+	
+	qq = []
+	for nu, Q2, f, err in data:
+		qq.append(Q2)
+	qq = sorted(set(qq))
+	#qq = [qq[2*i] for i in range(int(0.5*len(qq)))]
+	
+	data = [arange(0.001, 4., 0.001)]
+	plots = []
+	i = 1
+	for gg.Q2 in qq:
+		i += 1
+		data.append([w.cs(gg.nu2k(nu)) for nu in data[0]])
+		plots.append('1 %i label="$Q_2^2 :\; %.3f$"' % (i, gg.Q2))
+	
+	plot_to_file(data, plots, filename=os.path.join(out_dir, 'test_cs', filename), xylabel=r'"$\nu\;[GeV^2]$" "$\sigma\;[\mu b]$"')
 
 
 def test_f(out_dir):
@@ -144,11 +202,13 @@ def test_f(out_dir):
 
 if __name__ == '__main__':
 	
+	#test_cs(0.451, 0.119, 0.952, 0.093)
+	
 	test_f(os.path.join('out','test'))
 	
+	# plotting comparison for all the points currently available from lattice:
 	test_m_p(0.451, 0.119, 0.952, 0.093)
 	test_m_p(0.451, 0.119, 0.952, 0.369)
 	test_m_p(0.451, 0.119, 0.952, 0.828)
-	
 	test_m_p(0.324, 0.109, 0.922, 0.041)
 	test_m_p(0.324, 0.109, 0.922, 0.369)
