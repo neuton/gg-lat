@@ -81,8 +81,10 @@ def test_m_p(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	
 	plots = []
 	colors = ['b','g','r','c','m','y','k','grey','purple','orange','violet']
+	maxy = {}
 	i = 0
 	for nu in d.keys():
+		maxy[nu] = max([f for _,f,_ in d[nu]])
 		
 		print 'm = %.3f GeV  nu = %.3f GeV^2' % (M_pi, nu), '...'
 		
@@ -112,6 +114,8 @@ def test_m_p(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 		plots.append('include: "nu_%.3f"' % nu)
 	
 	with open(os.path.join(out_dir, 'out_'+filename, 'f'), 'w') as out:
+		out.write(r'title: $M_{\pi}:\,%.3f\,GeV \;\; Q_1^2:\,%.3f\,GeV^2$' % (M_pi, Q1) + '\n')
+		out.write('maxx: 5\nmaxy: %f\n' % (max(maxy.values())+0.00002))
 		out.write('\n'.join(plots))
 
 
