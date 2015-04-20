@@ -572,7 +572,50 @@ class EtaPrime(Region):
 		mon_m = 0.859 # monopole mass parameter
 		W_gg = 4.3*10**-6 # hardcoded physical value of gg-width
 		nu0 = gg.s2nu(gg.shift_mass(m)**2)
+		# note that there's no mistake in shifting the mass and width here
 		X0 = gg.nu2X(nu0)
 		nu = gg.k2nu(k)
 		FF = 1./((1 + gg.Q1/mon_m**2)*(1 + gg.Q2/mon_m**2))
 		return 64*pi * nu**2 * W_gg * X0 * FF**2 / (m**3 * nu0 * (nu0**2 - nu**2)), 0.
+
+
+class TensorMesonRegion(Region):
+	r"""
+	single tensor region :math:`\delta`-contribution.
+	
+	Pseudo-region class to mimic part of normal region instance usage.
+	Only `self.plot_f()` and `self.integral_f()` should be used.
+	
+	Parameters
+	----------
+	name : str, optional
+		name to display on graphs
+	"""
+	def __init__(self, m=1.27, W_gg=0.5*(3.49+2.93)*10**-6, mon_m=inf, name='tensor meson delta-contribution'):
+		self.name = name
+		self.m = m
+		self.W_gg = W_gg
+		self.mon_m = mon_m
+	
+	def integral_f(self, k):
+		r"""
+		.. math::
+			64\pi\frac{\nu^2\Gamma_{\gamma\gamma} X_0}{\nu_0(\nu_0^2-\nu^2)m^3} \left( \frac{20X_0}{m^4} + \frac{5\nu_0^2}{X_0} \right)
+		
+		Parameters
+		----------
+		k : float
+			:math:`\sqrt{2 q_1 \cdot q_2}, \; [GeV]`
+		
+		Returns
+		-------
+		tuple
+			value of Re(f(k)-f(0)), 0.
+		"""
+		m = gg.shift_mass(self.m)
+		W_gg = self.W_gg * m/self.m
+		nu0 = gg.s2nu(m**2)
+		X0 = gg.nu2X(nu0)
+		nu = gg.k2nu(k)
+		FF = 1./((1 + gg.Q1/self.mon_m**2)*(1 + gg.Q2/self.mon_m**2))
+		return 64*pi * nu**2 * W_gg * X0 * (20*X0/m**4 + 5*nu0**2/X0) / (m**3 * nu0 * (nu0**2 - nu**2)) * FF**2, 0.
