@@ -773,7 +773,7 @@ class PiPiFit(FunctionFit):
 	
 	def f(self, k):
 		r"""
-		.. math:: \frac{1}{2} \alpha^2 \frac{\pi}{2} \frac{s^2\nu^2}{X^3} \left(
+		.. math:: \frac{1}{2} \alpha^2 \frac{\pi}{2} \frac{s^2\nu^3}{X^3} \left(
 			\sqrt{a} \left(2 - a - \left(1 - \frac{2X}{s\nu}\right)^2\right) -
 			(1-a)\left(3 - \frac{4X}{s\nu} + a\right)L \right),
 		.. math:: L = \ln\left(\frac{1+\sqrt{a}}{\sqrt{1-a}}\right), \;\;\;\;\;\;\;
