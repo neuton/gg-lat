@@ -774,7 +774,7 @@ class PiPiFit(FunctionFit):
 	def f(self, k):
 		r"""
 		.. math:: \frac{1}{2} \alpha^2 \frac{\pi}{2} \frac{s^2\nu^3}{X^3} \left(
-			\sqrt{a} \left(2 - a - \left(1 - \frac{2X}{s\nu}\right)^2\right) -
+			\sqrt{a} \left(2 - a + \left(1 - \frac{2X}{s\nu}\right)^2\right) -
 			(1-a)\left(3 - \frac{4X}{s\nu} + a\right)L \right),
 		.. math:: L = \ln\left(\frac{1+\sqrt{a}}{\sqrt{1-a}}\right), \;\;\;\;\;\;\;
 			a = \frac{X}{\nu^2} \left(1 - \frac{4m^2}{s}\right), \;\;\;\;\;\;\;
@@ -793,5 +793,5 @@ class PiPiFit(FunctionFit):
 		else:
 			a = X*(1 - 4*m2/s)/nu**2
 			L = log((1 + a**0.5)/(1 - a)**0.5)
-			r = (a**0.5*(2 - a - (1 - 2*X/(s*nu))**2) - (1-a)*(3 + a - 4*X/(nu*s))*L) * s2*nu**3/X**3
+			r = (a**0.5*(2 - a + (1 - 2*X/(s*nu))**2) - (1-a)*(3 + a - 4*X/(nu*s))*L) * s2*nu**3/X**3
 			return r * (10**4*hc**2*alpha**2*pi/4)# * self.form_factor_fraction()
