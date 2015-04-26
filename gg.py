@@ -28,7 +28,7 @@ r""" :math:`\hbar c, \, [fm \cdot GeV]`
 Used for convertion from :math:`[\mu b]` to :math:`[1/GeV^2]`:
 
 .. math:: [\hbar c^2] = [fm^2 \cdot GeV^2] = [10^4 \mu b \cdot GeV^2]
-.. math:: [\mu b] = 10^4 \, \hbar c^2 \, [1/GeV^2]
+.. math:: 1 \; \frac{1}{GeV^2} = 10^4 \, (\hbar c \; [fm \cdot GeV])^2 \, \left[\frac{1}{GeV^2}\right]
 """
 
 alpha = 0.00729735257
