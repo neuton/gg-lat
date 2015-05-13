@@ -1,6 +1,8 @@
 gg-lat
 ======
 
+![screenshot](https://github.com/neuton/gg-lat/blob/master/gg.png)
+
 These are scripts for computation of forward scattering amplitude
 of two photons based on total absorption cross section.
 
