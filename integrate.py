@@ -178,7 +178,7 @@ class Region:
 		r"""
 		integrate cross section to obtain forward amplitude:
 		
-		.. math:: Re(f(\nu)-f(0)) = \frac{8\nu^2}{\pi} \int_{\nu_{min}}^{\nu_{max}}
+		.. math:: Re(f(\nu)-f(0)) = \frac{4\nu^2}{\pi} \int_{\nu_{min}}^{\nu_{max}}
 			\frac{\sqrt{X(\nu')}}{\nu'} \frac{d\nu'}{(\nu'^2-\nu^2)} \sigma_{TT}(\nu'),
 		
 		where :math:`\nu_{min}` and :math:`\nu_{max}` are bounds of the integration region.
@@ -199,7 +199,7 @@ class Region:
 		-----
 		Divergency extraction is done here (when :math:`\nu` is close enough to threshold):
 		
-		.. math:: I = \frac{8\nu^2}{\pi} \left(\int_{\nu_{min}}^{\nu_{max}} \frac{(a(\nu') - a(\nu))}{(\nu'^2-\nu^2)} d\nu' \; + \;
+		.. math:: I = \frac{4\nu^2}{\pi} \left(\int_{\nu_{min}}^{\nu_{max}} \frac{(a(\nu') - a(\nu))}{(\nu'^2-\nu^2)} d\nu' \; + \;
 			\frac{a(\nu)}{2\nu} \ln\left|\frac{\nu'-\nu}{\nu'+\nu}\right| \Big|_{\nu_{min}}^{\nu_{max}} \right),
 		
 		where
@@ -219,7 +219,7 @@ class Region:
 			singular = lambda p: 0. if p == inf else log(abs((p-nu)/(p+nu)))/(2*nu)
 			r, err = quad(lambda p: (a(p) - a_nu)/(p**2 - nu**2), nu0, nu1)[:2]
 			r +=  a_nu * (singular(nu1) - singular(nu0))
-		prefactor = 8 * nu**2 / (pi * 10**4 * hc**2) # don't forget to convert units
+		prefactor = 4 * nu**2 / (pi * 10**4 * hc**2) # don't forget to convert units
 		return prefactor * r, prefactor * err
 	
 	def plot_cs(self, xmin=None, xmax=None, filename=None, dx=None, var='k', color=None, raw=False, logx=False):
@@ -514,7 +514,7 @@ class Pi0(Region):
 	
 	def integral_f(self, k):
 		r"""
-		.. math:: \frac{\alpha^2}{\pi^2f_\pi^2}\; \frac{\nu^2 X_0}{\nu_0(\nu_0^2-\nu^2)}\; \left| \frac{F_{Q_1Q_2}}{F_{00}} \right|^2
+		.. math:: \frac{\alpha^2}{2\pi^2f_\pi^2}\; \frac{\nu^2 X_0}{\nu_0(\nu_0^2-\nu^2)}\; \left| \frac{F_{Q_1Q_2}}{F_{00}} \right|^2
 		
 		Parameters
 		----------
@@ -531,7 +531,7 @@ class Pi0(Region):
 		FF = 1./((1 + gg.Q1/mon_m**2)*(1 + gg.Q2/mon_m**2))
 		nu0 = gg.s2nu(gg.M_pi**2) # note that we use same mass for pi+ and pi0
 		X0 = gg.nu2X(nu0)
-		return (alpha*nu*FF / (pi*gg.f_pi))**2 * X0 / (nu0*(nu0**2 - nu**2)), 0.
+		return 0.5 * (alpha*nu*FF / (pi*gg.f_pi))**2 * X0 / (nu0*(nu0**2 - nu**2)), 0.
 
 
 
@@ -553,7 +553,7 @@ class EtaPrime(Region):
 	def integral_f(self, k):
 		r"""
 		.. math::
-			64\pi\frac{\nu^2\Gamma_{\gamma\gamma} X_0}{\nu_0(\nu_0^2-\nu^2)m^3} \left| \frac{F_{Q_1Q_2}}{F_{00}} \right|^2
+			32\pi\frac{\nu^2\Gamma_{\gamma\gamma} X_0}{\nu_0(\nu_0^2-\nu^2)m^3} \left| \frac{F_{Q_1Q_2}}{F_{00}} \right|^2
 		
 		Note that the mass is shifted and :math:`\Gamma_{\gamma\gamma}` is assumed to be proportional to :math:`m^3`,
 		while :math:`F_{00}` assumed to remain constant.
@@ -576,7 +576,7 @@ class EtaPrime(Region):
 		X0 = gg.nu2X(nu0)
 		nu = gg.k2nu(k)
 		FF = 1./((1 + gg.Q1/mon_m**2)*(1 + gg.Q2/mon_m**2))
-		return 64*pi * nu**2 * W_gg * X0 * FF**2 / (m**3 * nu0 * (nu0**2 - nu**2)), 0.
+		return 32*pi * nu**2 * W_gg * X0 * FF**2 / (m**3 * nu0 * (nu0**2 - nu**2)), 0.
 
 
 class TensorMesonRegion(Region):
@@ -600,7 +600,7 @@ class TensorMesonRegion(Region):
 	def integral_f(self, k):
 		r"""
 		.. math::
-			64\pi\frac{\nu^2\Gamma_{\gamma\gamma} X_0}{\nu_0(\nu_0^2-\nu^2)m^3} \left( \frac{20X_0}{m^4} + \frac{5\nu_0^2}{X_0} \right)
+			32\pi\frac{\nu^2\Gamma_{\gamma\gamma} X_0}{\nu_0(\nu_0^2-\nu^2)m^3} \left( \frac{20X_0}{m^4} + \frac{5\nu_0^2}{X_0} \right)
 		
 		Parameters
 		----------
@@ -618,4 +618,4 @@ class TensorMesonRegion(Region):
 		X0 = gg.nu2X(nu0)
 		nu = gg.k2nu(k)
 		FF = 1./((1 + gg.Q1/self.mon_m**2)*(1 + gg.Q2/self.mon_m**2))
-		return 64*pi * nu**2 * W_gg * X0 * (20*X0/m**4 + 5*nu0**2/X0) / (m**3 * nu0 * (nu0**2 - nu**2)) * FF**2, 0.
+		return 32*pi * nu**2 * W_gg * X0 * (20*X0/m**4 + 5*nu0**2/X0) / (m**3 * nu0 * (nu0**2 - nu**2)) * FF**2, 0.

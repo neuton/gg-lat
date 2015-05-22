@@ -1,6 +1,0 @@
-xylabel: "$\nu \; [GeV ^2]$" "$\sigma \; [\mu b]$"
-maxx: 3
-plot: 1 2 source=cs_0     color=grey  label=physical
-plot: 1 2 source=cs_0.093 color=red   label="$M_\pi : \, 0.451 \, GeV; \; Q_1^2 : \, 0.093 \, GeV^2; \; Q_2^2 : \, 0.369 \, GeV^2$"
-plot: 1 2 source=cs_0.369 color=green label="$M_\pi : \, 0.451 \, GeV; \; Q_1^2 : \, 0.369 \, GeV^2; \; Q_2^2 : \, 0.369 \, GeV^2$"
-plot: 1 2 source=cs_0.828 color=blue  label="$M_\pi : \, 0.451 \, GeV; \; Q_1^2 : \, 0.828 \, GeV^2; \; Q_2^2 : \, 0.369 \, GeV^2$"

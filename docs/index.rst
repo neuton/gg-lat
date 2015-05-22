@@ -76,6 +76,11 @@ while corresponding ``<data_name>`` files are for plotting like so:
 
 >>> python plot.py data/<data_name>
 
+Lattice data
+------------
+
+Lattice data files are stored in the `lattice` directory.
+
 
 Indices and tables
 ==================
