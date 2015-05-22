@@ -2,8 +2,3 @@ temp/*
 *.pyc
 docs/_*
 out/*
-!out/test
-out/test/*
-!out/test/f
-!out/test/cs
-!out/test/*.dat
