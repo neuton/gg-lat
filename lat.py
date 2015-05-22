@@ -63,13 +63,12 @@ def test1_mpi_q2(M_pi, f_pi, M_rho, Q2, out_dir='out'):
 	>>> python plot.py out/test1/mpi_451_Q2_094/f
 	
 	"""
+	initial_v = gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 # save initial values
 	
 	e = EtaPrime()
 	p = Pi0()
 	w = WholeRegion()
 	h = WholeRegion(name='h', add_regge=True)
-	
-	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q2 = M_pi, f_pi, M_rho, Q2
 	
 	filename = get_lattice_data_filename(M_pi, Q2, s='mpi_%03d_Q2_%03d')
 	with open(os.path.join('lattice', filename + '__int')) as fi:
@@ -93,6 +92,8 @@ def test1_mpi_q2(M_pi, f_pi, M_rho, Q2, out_dir='out'):
 	
 	h.plot_cs(var='nu', xmax=50., dx=0.01, filename=os.path.join(out_dir, 'cs_0'), raw=True)
 	
+	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q2 = M_pi, f_pi, M_rho, Q2
+	
 	plots = []
 	for gg.Q1 in d.keys():
 		h.plot_cs(var='nu', xmax=50., dx=0.01, filename=os.path.join(out_dir,'cs_%.3f'%gg.Q1), raw=True)
@@ -114,13 +115,16 @@ def test1_mpi_q2(M_pi, f_pi, M_rho, Q2, out_dir='out'):
 	
 	with open(os.path.join(out_dir, 'f'), 'w') as fo:
 		fo.write(r"xylabel: '$\nu \, [GeV^2]$' '$Re\,f - f_0$'" + '\n')
-		fo.write('maxx: 0.7\nmaxy: 0.00012\nlinewidth: 1.5\n')
+		gg.Q1 = max(d.keys())
+		fo.write('maxx: %f\nmaxy: 0.00012\nlinewidth: 1.5\n' % gg.s2nu(gg.M_pi**2))
 		for Q1, color in zip(d.keys(), colors):
 			fo.write('plot: 1 2 source=fw_%.3f color=%s '%(Q1, color) + r'label="$Q_1^2 : \, ' + '%.3f'%Q1 + r' \, GeV^2$"' + '\n')
 			fo.write('plot: 1 2 source=fh_%.3f color=%s linestyle=-.\n' % (Q1, color))
 			fo.write('plot: 1 2 source=fp_%.3f color=%s linestyle=--\n' % (Q1, color))
 			fo.write('plot: 1 2 source=fe_%.3f color=%s linestyle=:\n' % (Q1, color))
 			fo.write('plot: 1 2 yerr=3 source=f_%.3f marker=o linestyle=None color=%s\n' % (Q1, color))
+	
+	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 = initial_v # restore initial values
 
 
 def test2_mpi_q1(M_pi, f_pi, M_rho, Q1, out_dir='out'):
@@ -156,6 +160,8 @@ def test2_mpi_q1(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	>>> python plot.py out/test2/mpi_451_Q1_094/f
 	
 	"""
+	initial_v = gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 # save initial values
+	
 	#w = TensorMesonRegion(mon_m=0.8) + EtaPrime() + Pi0()
 	w = WholeRegion(add_regge=False)
 	
@@ -218,8 +224,10 @@ def test2_mpi_q1(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	
 	with open(os.path.join(out_dir, 'f'), 'w') as out:
 		out.write(r'title: $M_{\pi}:\,%.3f\,GeV \;\; Q_1^2:\,%.3f\,GeV^2$' % (M_pi, Q1) + '\n')
-		out.write('maxx: 5\nminy: %f\nmaxy: %f\n' % (min(maxy.values())-0.00001, max(maxy.values())+0.00001))
+		out.write('maxx: 5\nmaxy: %f\n' % (max(maxy.values())+0.00001))
 		out.write('\n'.join(plots))
+	
+	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 = initial_v # restore initial values
 
 
 def test_cs(M_pi, f_pi, M_rho, Q1, out_dir='out'):
@@ -253,6 +261,8 @@ def test_cs(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	>>> python plot.py out/test_cs/mpi_451_Q1_094
 	
 	"""
+	initial_v = gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 # save initial values
+	
 	make_sure_path_exists(out_dir)
 	w = WholeRegion(add_regge=True)
 	#w = PiPiRegion()
@@ -284,6 +294,8 @@ def test_cs(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	
 	make_sure_path_exists(os.path.join(out_dir, 'test_cs'))
 	plot_to_file(data, plots, filename=os.path.join(out_dir, 'test_cs', filename), xylabel=r'"$\nu\;[GeV^2]$" "$\sigma\;[\mu b]$"')
+	
+	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 = initial_v # restore initial values
 
 
 if __name__ == '__main__':
