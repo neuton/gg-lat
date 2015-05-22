@@ -406,6 +406,16 @@ class ResonanceRegion(Region):
 
 
 
+class PiPiRegion(Region):
+	
+	def __init__(self, k_max=inf, name='pi-pi region', init=False):
+		Region.__init__(self, PiPiFit(), k_min=2*gg.M_pi, k_max=k_max, name=name, init=init)
+	
+	def k_bounds(self):
+		return map(gg.s2k, (4*gg.M_pi**2, gg.shift_mass(self.k_max)**2))
+
+
+
 class ReggeRegion(Region):
 	r"""
 	high-energy Regge behavior region from specified lower bound up to :math:`\infty`.
