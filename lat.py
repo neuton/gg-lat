@@ -55,7 +55,7 @@ def test1_mpi_q2(M_pi, f_pi, M_rho, Q2, out_dir='out'):
 	
 	.. code-block:: python
 	
-		from lat.py import test1_mpi_q2
+		from lat import test1_mpi_q2
 		test1_mpi_q2(0.451, 0.119, 0.952, 0.094)
 	
 	run and wait for a while; then plot results:
@@ -152,7 +152,7 @@ def test2_mpi_q1(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	
 	.. code-block:: python
 	
-		from lat.py import test2_mpi_q1
+		from lat import test2_mpi_q1
 		test2_mpi_q1(0.451, 0.119, 0.952, 0.094)
 	
 	run and wait for a while; then plot results:
@@ -253,7 +253,7 @@ def test_cs(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 	
 	.. code-block:: python
 	
-		from lat.py import test_cs
+		from lat import test_cs
 		test_cs(0.451, 0.119, 0.952, 0.094)
 	
 	run and wait for a while; then plot results:

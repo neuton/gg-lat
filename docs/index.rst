@@ -79,7 +79,7 @@ while corresponding ``<data_name>`` files are for plotting like so:
 Lattice data
 ------------
 
-Lattice data files are stored in the `lattice` directory.
+Lattice data files are stored in the ``lattice`` directory.
 
 
 Indices and tables
