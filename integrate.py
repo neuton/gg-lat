@@ -477,7 +477,7 @@ class WholeRegion(Region):
 			self.hr = ReggeRegion(init=False)
 			self.region = Region(Smooth(self.rr.fit, self.hr.fit, m, a0=0.1), *self.k_bounds(), init=False)
 		else:
-			self.region = Region(self.rr.fit, *self.k_bounds(), init=False)
+			self.region = self.rr
 		self.fit = self.region.fit
 		self.update_data(filename1=filename1, filename2=filename2)
 		if init:
@@ -489,7 +489,7 @@ class WholeRegion(Region):
 		self.rr.update_data(filename1)
 		if self.add_regge:
 			self.hr.update_data(filename2)
-		self.region.update_data(filename2)
+			self.region.update_data(filename2)
 		return Region.update_data(self, filename2)
 	
 	def update_fit(self, quiet=False):
