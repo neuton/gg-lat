@@ -85,7 +85,7 @@ Examples
 
 
 import numpy
-from scipy.optimize import curve_fit, leastsq
+from scipy.optimize import curve_fit
 from scipy import log, exp, pi, inf
 
 from gg import alpha, hc
@@ -210,7 +210,7 @@ class FunctionFit:
 		"""
 		fit the fitting function to the data.
 		
-		uses `curve_fit` and then `leastsq` from ``scipy.optimize``
+		uses `curve_fit` from ``scipy.optimize``
 		
 		Parameters
 		----------
@@ -229,17 +229,12 @@ class FunctionFit:
 			self
 		"""
 		if not quiet: print 'fitting ...'
-		p, pcov = curve_fit(self, xdata, ydata, p0=self.get_p())
-		if not quiet:
-			print 'chisqr =', chisqr(self, xdata, ydata, errdata)
-			print 'curve_fit: success'
-		r = lambda p: numpy.array([abs(y - self(x, *p))/err for x,y,err in zip(xdata,ydata,errdata)], dtype=float)
-		p, pcov = leastsq(func=r, x0=p, full_output=True)[:2]
+		p, pcov = curve_fit(self, xdata, ydata, p0=self.get_p(), sigma=errdata, absolute_sigma=True)
 		self.set_p(*p)
 		self.chisqr = chisqr(self, xdata, ydata, errdata)
 		if not quiet:
 			print 'chisqr =', self.chisqr
-			print 'leastsq: success'
+			print 'curve_fit: success'
 		return self
 
 
