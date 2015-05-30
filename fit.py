@@ -616,15 +616,15 @@ class TensorResonanceFit(ResonanceFit):
 
 class f0_500(ScalarResonanceFit):
 	def __init__(self, m=0.5, W_tot=0.5, W_gg=2.05*10**-6):
-		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.2) # added artificial monopole mass parameter
+		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 class f0_980(ScalarResonanceFit):
 	def __init__(self, m=0.998, W_tot=0.042, W_gg=0.32*10**-6):
-		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.2) # added artificial monopole mass parameter
+		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 class f0_1370(ScalarResonanceFit):
 	def __init__(self, m=1.44, W_tot=0.4, W_gg=4.*10**-6):
-		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.2) # added artificial monopole mass parameter
+		ScalarResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 
 # axial vector resonances:
@@ -642,11 +642,11 @@ class f1_1420(AxialVectorResonanceFit):
 
 class a2_1320(TensorResonanceFit):
 	def __init__(self, m=1.313, W_tot=0.107, W_gg=1.04*10**-6):
-		TensorResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.2) # added artificial monopole mass parameter
+		TensorResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6) # added artificial monopole mass parameter
 
 class f2_1270(TensorResonanceFit):
 	def __init__(self, m=1.27, W_tot=0.1851, W_gg=0.5 * (3.49 + 2.93)*10**-6):
-		TensorResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.2, h0_fraction=0.085) # added artificial monopole mass parameter
+		TensorResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.6, h0_fraction=0.085) # added artificial monopole mass parameter
 
 
 
