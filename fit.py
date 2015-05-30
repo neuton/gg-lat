@@ -46,7 +46,7 @@ Examples
 		r = ResonanceRegionFit().fit(xdata, ydata, errdata)
 		rx = arange(0, 2., 0.0002)
 		for gg.f_pi, gg.M_pi, gg.M_rho in zip([0.0924, 0.109, 0.119], [0.1396, 0.324, 0.451], [0.7755, 0.922, 0.952]):
-		# ^ note that you have to explicitely set gg.f_pi and gg.M_rho as well
+		# ^ note that you have to explicitly set gg.f_pi and gg.M_rho as well
 			ry = [r(x) for x in rx]
 			plot = r'1 2 label="$M_{\pi}: \, ' + str(gg.M_pi) + '$"'
 			plot_to_file([rx, ry], [plot], 'out/fit_m_%.2f' % gg.M_pi)
@@ -141,7 +141,7 @@ class FunctionFit:
 		k : float
 			:math:`\sqrt{2 q_1 \cdot q_2}` in GeV
 		p : args, optional
-			explicitely specified list of fitting parameters
+			explicitly specified list of fitting parameters
 		
 		Returns
 		-------
@@ -161,7 +161,7 @@ class FunctionFit:
 	
 	def set_p(self, *p):
 		"""
-		explicitely set fit parameters.
+		explicitly set fit parameters.
 		
 		Parameters
 		----------
@@ -327,7 +327,7 @@ class ResonanceFit(FunctionFit):
 		k : float
 			:math:`\sqrt{2 q_1 \cdot q_2}, \; [GeV]`
 		p : args, optional
-			explicitely specified list of fitting parameters: `m` (physical :math:`m`) and `W_tot` (physical :math:`\Gamma_{tot}`)
+			explicitly specified list of fitting parameters: `m` (physical :math:`m`) and `W_tot` (physical :math:`\Gamma_{tot}`)
 		
 		Returns
 		-------
@@ -359,7 +359,7 @@ class ResonanceFit(FunctionFit):
 		k : float
 			:math:`\sqrt{2 q_1 \cdot q_2}, \; [GeV]`
 		p : args, optional
-			explicitely specified list of fitting parameters: `m` (physical :math:`m`) and `W_tot` (physical :math:`\Gamma_{tot}`)
+			explicitly specified list of fitting parameters: `m` (physical :math:`m`) and `W_tot` (physical :math:`\Gamma_{tot}`)
 		
 		Returns
 		-------
@@ -432,12 +432,15 @@ class ResonanceFit(FunctionFit):
 			(2J + 1) \Gamma_{\gamma\gamma} \; \cdot \; \mathrm{k\_factor} \; \cdot \;
 			\left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right|^2 \;\;\;\;\; [\mu b]
 		
+		Note that :math:`m` and :math:`\Gamma_{\gamma\gamma}` are shifted with pion mass shift.
+		
 		Parameters
 		----------
 		k : float
 			:math:`\sqrt{2 q_1 \cdot q_2}, \; [GeV]`
 		p : args, optional
-			explicitely specified list of fitting parameters: `m` (physical :math:`m`), `W_tot` (physical :math:`\Gamma_{tot}`), `W_gg` (physical :math:`\Gamma_{gg}`) and `J` (spin :math:`J`)
+			explicitly specified list of fitting parameters: `m` (physical :math:`m`), `W_tot` (physical :math:`\Gamma_{tot}`),
+			`W_gg` (physical :math:`\Gamma_{\gamma\gamma}`) and `J` (spin :math:`J`)
 		
 		Returns
 		-------
@@ -692,7 +695,7 @@ class ResonanceRegionFit(FunctionFit):
 		k : float
 			:math:`\sqrt{2 q_1 \cdot q_2}, \; [GeV]`
 		p : args, optional
-			explicitely specified list of fitting parameters --- sequence of fitting parameters of included resonances
+			explicitly specified list of fitting parameters --- sequence of fitting parameters of included resonances
 		
 		Returns
 		-------
@@ -733,7 +736,7 @@ class ReggeFit(FunctionFit):
 		k : float
 			:math:`\sqrt{2 q_1 \cdot q_2}, \; [GeV]`
 		p : args, optional
-			explicitely specified list of fitting parameters --- :math:`C_1`, :math:`C_2`, :math:`a`, :math:`b`
+			explicitly specified list of fitting parameters --- :math:`C_1`, :math:`C_2`, :math:`a`, :math:`b`
 		
 		Returns
 		-------
