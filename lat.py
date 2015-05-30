@@ -114,7 +114,7 @@ def test1_mpi_q2(M_pi, f_pi, M_rho, Q2, out_dir='out'):
 			fo.write('plot: 1 2 source=cs_%.3f color=%s label=' % (Q1, color) + r'"$Q_1^2 : \, ' + '%.3f'%Q1 + r' \, GeV^2$"' + '\n')
 	
 	with open(os.path.join(out_dir, 'f'), 'w') as fo:
-		fo.write(r"xylabel: '$\nu \, [GeV^2]$' '$Re\,f - f_0$'" + '\n')
+		fo.write(r"xylabel: '$\nu \, [GeV^2]$' '$\frac{1}{2}(M_{++,++} + M_{+-,+-})$'" + '\n')
 		gg.Q1 = max(d.keys())
 		fo.write('maxx: %f\nmaxy: 0.00012\nlinewidth: 1.5\n' % gg.s2nu(gg.M_pi**2))
 		for Q1, color in zip(d.keys(), colors):
@@ -215,7 +215,7 @@ def test2_mpi_q1(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 		
 		i = (i + 1) % len(colors)
 		with open(os.path.join(out_dir, 'nu_%.3f' % nu), 'w') as out:
-			out.write(r'xylabel: "$Q_2^2 \, [GeV^2]$" "$Re f - f_0$"' + '\n')
+			out.write(r'xylabel: "$Q_2^2 \, [GeV^2]$" "$\frac{1}{2}(M_{++,++} + M_{+-,+-})$"' + '\n')
 			out.write('color: %s\n' % colors[i])
 			out.write('plot: 1 2 yerr=3 linestyle=None marker=s\n')
 			out.write(r'plot: 4 5 label="$\nu : \; %.3f$"' % nu + '\n')
