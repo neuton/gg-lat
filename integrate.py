@@ -598,19 +598,30 @@ class TensorMesonRegion(Region):
 	
 	Parameters
 	----------
+	m : float, optional
+		*physical* mass of the meson (:math:`m`), [GeV]
+	W_gg : float, optional
+		*physical* :math:`\gamma\gamma` decay width of the meson (:math:`\Gamma_{\gamma\gamma}`), [GeV]
+	mon_m : float, optional
+		monopole mass for the form factor fraction, [GeV]
+	h0_fraction : float, optional
+		helicity-zero fraction of the :math:`\Gamma_{\gamma\gamma}` width
 	name : str, optional
 		name to display on graphs
 	"""
-	def __init__(self, m=1.27, W_gg=0.5*(3.49+2.93)*10**-6, mon_m=inf, name='tensor meson delta-contribution'):
+	def __init__(self, m=1.3, W_gg=1.*10**-6, mon_m=inf, h0_fraction=0., name='tensor meson delta-contribution'):
 		self.name = name
 		self.m = m
 		self.W_gg = W_gg
 		self.mon_m = mon_m
+		self.h0_fraction = h0_fraction
 	
 	def integral_f(self, k):
 		r"""
 		.. math::
-			32\pi\frac{\nu^2\Gamma_{\gamma\gamma} X_0}{\nu_0(\nu_0^2-\nu^2)m^3} \left( \frac{20X_0}{m^4} + \frac{5\nu_0^2}{X_0} \right)
+			64\pi\frac{\nu^2\Gamma_{\gamma\gamma} X_0}{\nu_0(\nu_0^2-\nu^2)m^3}
+			\left( <\sigma_0 \; \mathrm{fraction}> \cdot \frac{20X_0}{m^4} +
+			<\sigma_2 \; \mathrm{fraction}> \cdot \frac{5\nu_0^2}{X_0} \right)
 		
 		Parameters
 		----------
@@ -628,4 +639,6 @@ class TensorMesonRegion(Region):
 		X0 = gg.nu2X(nu0)
 		nu = gg.k2nu(k)
 		FF = 1./((1 + gg.Q1/self.mon_m**2)*(1 + gg.Q2/self.mon_m**2))
-		return 32*pi * nu**2 * W_gg * X0 * (20*X0/m**4 + 5*nu0**2/X0) / (m**3 * nu0 * (nu0**2 - nu**2)) * FF**2, 0.
+		h0 = self.h0_fraction
+		h2 = 1 - h0
+		return 64*pi * nu**2 * W_gg * X0 * (h0*20*X0/m**4 + h2*5*nu0**2/X0) / (m**3 * nu0 * (nu0**2 - nu**2)) * FF**2, 0.

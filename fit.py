@@ -531,7 +531,7 @@ class AxialVectorResonanceFit(ResonanceFit):
 		dipole mass for the form factor fraction, [GeV]
 	"""
 	def __init__(self, m, W_tot, W_gg, dip_m=inf):
-		ResonanceFit.__init__(self, 0, m, W_tot, W_gg)
+		ResonanceFit.__init__(self, 1, m, W_tot, W_gg)
 		self.dip_m = dip_m
 	
 	def k_factor(self, *p):
@@ -583,19 +583,24 @@ class TensorResonanceFit(ResonanceFit):
 		*physical* width of the resonance (:math:`\Gamma_{tot}`), [GeV] --- initial fitting parameter
 	W_gg : float
 		*physical* :math:`\gamma\gamma` decay width of the resonance (:math:`\Gamma_{\gamma\gamma}`), [GeV] --- initial fitting parameter
+	mon_m : float, optional
+		monopole mass for the form factor fraction, [GeV]
+	h0_fraction : float, optional
+		helicity-zero fraction of the :math:`\Gamma_{\gamma\gamma}` width
 	"""
-	def __init__(self, m, W_tot, W_gg, mon_m=inf):
-		ResonanceFit.__init__(self, 0, m, W_tot, W_gg)
+	def __init__(self, m, W_tot, W_gg, mon_m=inf, h0_fraction=0.):
+		ResonanceFit.__init__(self, 2, m, W_tot, W_gg)
+		self.h0_fraction = h0_fraction
 		self.mon_m = mon_m
 	
 	def k_factor(self, *p):
 		r"""
 		kinematical factor.
 		
-		.. math:: \frac{2 \nu_0^2}{m^2 \sqrt{X_0}} \; + \; \frac{8X_0\sqrt{X_0}}{m^6}
+		.. math:: <\sigma_2 \; \mathrm{fraction}> \cdot \frac{2 \nu_0^2}{m^2 \sqrt{X_0}} \; + \;
+			<\sigma_0 \; \mathrm{fraction}> \cdot \frac{8X_0\sqrt{X_0}}{m^6}
 		
 		Note that 2 factors coming from :math:`\sigma_0` and :math:`\sigma_2` are added here.
-		:math:`\Gamma_{\gamma\gamma}` widths are assumed to be equal for both :math:`\sigma_0` and :math:`\sigma_2`.
 		
 		Parameters
 		----------
@@ -610,7 +615,9 @@ class TensorResonanceFit(ResonanceFit):
 		m = gg.shift_mass(self.full_p(p)[0])
 		nu0 = gg.s2nu(m**2)
 		X0 = gg.nu2X(nu0)
-		return 2 * nu0**2 / (m**2 * X0**0.5) + 8*X0**1.5/m**6
+		h0 = self.h0_fraction
+		h2 = 1. - h0
+		return h2 * 2*nu0**2/(m**2*X0**0.5) + h0 * 8*X0**1.5/m**6
 	
 	def form_factor_fraction(self):
 		r"""
@@ -661,7 +668,7 @@ class a2_1320(TensorResonanceFit):
 
 class f2_1270(TensorResonanceFit):
 	def __init__(self, m=1.27, W_tot=0.1851, W_gg=0.5 * (3.49 + 2.93)*10**-6):
-		TensorResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.2) # added artificial monopole mass parameter
+		TensorResonanceFit.__init__(self, m, W_tot, W_gg, mon_m=1.2, h0_fraction=0.085) # added artificial monopole mass parameter
 
 
 
@@ -676,9 +683,8 @@ class ResonanceRegionFit(FunctionFit):
 	def __init__(self):
 		self.resonances = [f0_980(), a2_1320(), f2_1270()] + [f1_1285(), f1_1420()]
 		# setting already fitted parameters here, so that we don't need to refit each time:
-		p0 = [0.98245702190502038, 0.034460567775547173, 2.1173056323462041e-07,
-			1.2625605391874659, 0.13163851473973218, 3.8906514125532965e-06,
-			1.1782303951657658, 0.15573290936433748, 1.787955427585119e-06]
+		p0 = [9.83160138e-01, 3.79284134e-02, 2.38497670e-07, 1.26281422e+00,
+			1.29416726e-01, 1.56615203e-06, 1.17648647e+00, 1.44924309e-01, 6.71613500e-07]
 		self.background = PiPiFit()
 		FunctionFit.__init__(self, p=p0)#self.get_p())
 	
