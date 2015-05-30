@@ -405,7 +405,7 @@ class ResonanceFit(FunctionFit):
 		r"""
 		default kinematical factor:
 		
-		.. math:: \frac{k_0^2}{m^2}
+		.. math:: \frac{2 \nu_0^2}{m^2 \sqrt{X_0}}
 		
 		Parameters
 		----------
@@ -418,8 +418,9 @@ class ResonanceFit(FunctionFit):
 			kinematical factor
 		"""
 		m = gg.shift_mass(self.full_p(p)[0])
-		k0 = gg.s2k(m**2)
-		return k0**2 / m**2
+		nu0 = gg.s2nu(m**2)
+		X0 = gg.nu2X(nu0)
+		return 2 * nu0**2 / (m**2 * X0**0.5)
 	
 	def f(self, k, *p):
 		r"""
@@ -476,27 +477,6 @@ class ScalarResonanceFit(ResonanceFit):
 	def __init__(self, m, W_tot, W_gg, mon_m=inf):
 		ResonanceFit.__init__(self, 0, m, W_tot, W_gg)
 		self.mon_m = mon_m
-	
-	def k_factor(self, *p):
-		r"""
-		kinematical factor.
-		
-		.. math:: \frac{2 \nu_0^2}{m^2 \sqrt{X_0}}
-		
-		Parameters
-		----------
-		p : args, optional
-			`m` (physical :math:`m`)
-		
-		Returns
-		-------
-		float
-			kinematical factor
-		"""
-		m = gg.shift_mass(self.full_p(p)[0])
-		nu0 = gg.s2nu(m**2)
-		X0 = gg.nu2X(nu0)
-		return 2 * nu0**2 / (m**2 * X0**0.5)
 	
 	def form_factor_fraction(self):
 		r"""
