@@ -208,7 +208,7 @@ class Region:
 		"""
 		nu = gg.k2nu(k)
 		nu0, nu1 = map(gg.k2nu, self.k_bounds())
-		a = lambda x: self.cs(x) * gg.nu2X(x)**0.5 / x
+		a = lambda x: self.cs(gg.nu2k(x)) * gg.nu2X(x)**0.5 / x
 		if gg.nu2X(nu) <= 0:
 			# temporar hack: separating integration region
 			q1 = quad(lambda p: a(p)/(p**2 - nu**2), nu0, 4*nu0)[:2]
