@@ -758,30 +758,31 @@ class PiPiFit(FunctionFit):
 	
 	Without any fitting parameters.
 	
-	Also note that form-factors *are not included here*.
+	Note that monopole-form form-factors with :math:`\Lambda=M_\rho` are included here.
 	"""
 	def __init__(self):
 		FunctionFit.__init__(self)
-		#self.mon_m = 0.776 # GeV
+		self.mon_m = gg.M_rho
 	
-	#def form_factor_fraction(self):
-	#	r"""
-	#	squared monopole-form form-factor fraction:
-	#	
-	#	.. math:: \left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right|^2 = \left( \frac{1}{1 + Q_1^2/\Lambda^2} \cdot \frac{1}{1 + Q_2^2/\Lambda^2} \right)^2
-	#	
-	#	Returns
-	#	-------
-	#	float
-	#		squared form-factor fraction
-	#	"""
-	#	return ( 1. / (1 + gg.Q1/self.mon_m**2) / (1 + gg.Q2/self.mon_m**2) )**2
+	def form_factor_fraction(self):
+		r"""
+		monopole-form form-factor fraction:
+		
+		.. math:: \left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right| = \frac{1}{1 + Q_1^2/\Lambda^2} \cdot \frac{1}{1 + Q_2^2/\Lambda^2}
+		
+		Returns
+		-------
+		float
+			form-factor fraction
+		"""
+		return 1. / (1 + gg.Q1/self.mon_m**2) / (1 + gg.Q2/self.mon_m**2)
 	
 	def f(self, k):
 		r"""
 		.. math:: \frac{1}{2} \alpha^2 \frac{\pi}{2} \frac{s^2\nu^3}{X^3} \left(
 			\sqrt{a} \left(2 - a + \left(1 - \frac{2X}{s\nu}\right)^2\right) -
-			(1-a)\left(3 - \frac{4X}{s\nu} + a\right)L \right),
+			(1-a)\left(3 - \frac{4X}{s\nu} + a\right)L \right)
+			\left| \frac{F(Q_1, Q_2)}{F(0, 0)} \right|^2,
 		.. math:: L = \ln\left(\frac{1+\sqrt{a}}{\sqrt{1-a}}\right), \;\;\;\;\;\;\;
 			a = \frac{X}{\nu^2} \left(1 - \frac{4m^2}{s}\right), \;\;\;\;\;\;\;
 			X = \nu^2 - Q_1^2 \cdot Q_2^2
@@ -800,4 +801,4 @@ class PiPiFit(FunctionFit):
 			a = X*(1 - 4*m2/s)/nu**2
 			L = log((1 + a**0.5)/(1 - a)**0.5)
 			r = (a**0.5*(2 - a + (1 - 2*X/(s*nu))**2) - (1-a)*(3 + a - 4*X/(nu*s))*L) * s2*nu**3/X**3
-			return r * (10**4*hc**2*alpha**2*pi/4)# * self.form_factor_fraction()
+			return r * (10**4*hc**2*alpha**2*pi/4) * self.form_factor_fraction()**2
