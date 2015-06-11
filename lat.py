@@ -97,9 +97,9 @@ def test1_mpi_q2(M_pi, f_pi, M_rho, Q2, out_dir='out'):
 	plots = []
 	for gg.Q1 in d.keys():
 		h.plot_cs(var='nu', xmax=50., dx=0.01, filename=os.path.join(out_dir,'cs_%.3f'%gg.Q1), raw=True)
-		nu_max = gg.s2nu(gg.M_pi**2) - 0.01
+		nu_max = gg.s2nu(gg.M_pi**2) - 0.002
 		for r in [e+p, p, w, h]:
-			r.plot_f(var='nu', xmax=nu_max, dx=0.01, filename=os.path.join(out_dir,'f%s_%.3f'%(r.name[0],gg.Q1)), raw=True)
+			r.plot_f(var='nu', xmax=nu_max, dx=0.01*nu_max, filename=os.path.join(out_dir,'f%s_%.3f'%(r.name[0],gg.Q1)), raw=True)
 		with open(os.path.join(out_dir, 'f_%.3f' % gg.Q1), 'w') as fo:
 			fo.write('\n'.join([' '.join(map(str, l)) for l in d[gg.Q1]]))
 	
@@ -199,9 +199,9 @@ def test2_mpi_q1(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 		print 'm = %.3f GeV  nu = %.3f GeV^2' % (M_pi, nu), '...'
 		
 		w_res = []
-		Q2_min = 2*nu - gg.M_pi**2 - gg.Q1 + 0.1
+		Q2_min = 2*nu - gg.M_pi**2 - gg.Q1 + 0.01
 		Q2_max = 6.
-		for gg.Q2 in arange(Q2_min, Q2_max, 0.1):
+		for gg.Q2 in arange(Q2_min, Q2_max, 0.01*(Q2_max - Q2_min)):
 			w_res.append([gg.Q2] + list(w.integral_f(gg.nu2k(nu))))
 		
 		values = []
@@ -226,6 +226,85 @@ def test2_mpi_q1(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 		out.write(r'title: $M_{\pi}:\,%.3f\,GeV \;\; Q_1^2:\,%.3f\,GeV^2$' % (M_pi, Q1) + '\n')
 		out.write('maxx: 5\nmaxy: %f\n' % (max(maxy.values())+0.00001))
 		out.write('\n'.join(plots))
+	
+	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 = initial_v # restore initial values
+
+
+def test3_q1_q2(Q1, Q2, out_dir='out'):
+	r"""
+	for given :math:`Q_1^2` and :math:`Q_2^2`, for each of 3 pion masses (277, 324, 451 MeV)
+	plot :math:`\nu`-dependence of the amplitude compared to interpolated lattice results.
+	
+	Parameters
+	----------
+	Q1 : float
+		:math:`Q_1^2`
+	Q2 : float
+		:math:`Q_2^2`
+	out_dir : str, optional
+		root output directory
+	
+	Examples
+	--------
+	
+	.. code-block:: python
+	
+		from lat import test3_q1_q2
+		test3_q1_q2(0.377, 0.377)
+	
+	run and wait for a while; then plot results:
+	
+	>>> python plot.py out/test3/f
+	
+	"""
+	initial_v = gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 # save initial values
+	
+	d = dict()
+	for M_pi in [0.277, 0.324, 0.451]:
+		filename = get_lattice_data_filename(M_pi, Q2, s='mpi_%03d_Q2_%03d')
+		with open(os.path.join('lattice', filename + '__int')) as fi:
+			data = []
+			for l in fi:
+				try:
+					data .append(map(float, l.split()))
+				except ValueError:
+					pass
+		for nu, q1, f, err in data:
+			if q1 == Q1:
+				try:
+					d[M_pi] += [[nu, f, err]]
+				except KeyError:
+					d[M_pi] = [[nu, f, err]]
+	print 
+	e = EtaPrime()
+	p = Pi0()
+	w = WholeRegion()
+	h = WholeRegion(name='h', add_regge=True)
+	
+	out_dir = os.path.join(out_dir, 'test3')
+	make_sure_path_exists(out_dir)
+	
+	gg.Q1, gg.Q2 = Q1, Q2
+	for gg.M_pi, gg.f_pi, gg.M_rho in [(0.277, 0.104, 0.878), (0.324, 0.109, 0.922), (0.451, 0.119, 0.952)]:
+		nu_max = gg.s2nu(gg.M_pi**2) - 0.002
+		for r in [e+p, p, w, h]:
+			r.plot_f(var='nu', xmax=nu_max, dx=0.01*nu_max, filename=os.path.join(out_dir,'f%s_%03d'%(r.name[0], int(1000*gg.M_pi))), raw=True)
+		with open(os.path.join(out_dir, 'fl_%03d' % int(1000*gg.M_pi)), 'w') as fo:
+			fo.write('\n'.join([' '.join(map(str, l)) for l in d[gg.M_pi]]))
+	
+	colors = ['r','g','b','c','m','y','k','grey','purple','orange','violet']
+	colors = (colors * (1 + len(d.keys())/len(colors)))[:len(d.keys())]
+	
+	with open(os.path.join(out_dir, 'f'), 'w') as fo:
+		fo.write(r"xylabel: '$\nu \, [GeV^2]$' '$\frac{1}{2}(M_{++,++} + M_{+-,+-})$'" + '\n')
+		gg.M_pi = max(d.keys())
+		fo.write('maxx: %f\nmaxy: 0.00012\nlinewidth: 1.5\n' % 0.4)#gg.s2nu(gg.M_pi**2))
+		for M_pi, color in zip(map(lambda x: int(1000*x), d.keys()), colors):
+			fo.write('plot: 1 2 source=fw_%03d color=%s '%(M_pi, color) + r'label="$M_\pi : \, ' + '%03d'%M_pi + r' \, MeV$"' + '\n')
+			fo.write('plot: 1 2 source=fh_%03d color=%s linestyle=-.\n' % (M_pi, color))
+			fo.write('plot: 1 2 source=fp_%03d color=%s linestyle=--\n' % (M_pi, color))
+			fo.write('plot: 1 2 source=fe_%03d color=%s linestyle=:\n' % (M_pi, color))
+			fo.write('plot: 1 2 yerr=3 source=fl_%03d marker=o linestyle=None color=%s\n' % (M_pi, color))
 	
 	gg.M_pi, gg.f_pi, gg.M_rho, gg.Q1, gg.Q2 = initial_v # restore initial values
 
@@ -299,6 +378,9 @@ def test_cs(M_pi, f_pi, M_rho, Q1, out_dir='out'):
 
 
 if __name__ == '__main__':
+	
+	# plot f(nu) for different pion masses:
+	test3_q1_q2(0.377, 0.377)
 	
 	# see cross sections extrapolation:
 	test_cs(0.451, 0.119, 0.952, 0.094)
