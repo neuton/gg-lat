@@ -60,7 +60,7 @@ where :math:`k` is a mass of a system of 2 photons (see gg.py_)
 3 columns of floats stand for :math:`k\,[GeV]`, :math:`\sigma_{tot}\, [\mu b]` and absolute error, respectively.
 
 - `data/data.dat`_ --- data from `PDG`__
-- `data/pennington.dat`_ --- fit points for :math:`\pi^+ + \pi^-` channels from `Pennington's article`__
+- `data/pennington.dat`_ --- fit points for :math:`\pi^+ \pi^- + \pi^0 \pi^0` channels from `Pennington's article`__
 - `data/full_data.dat`_ --- combined data from Pennington + PDG
 
 Note that in `data/pennington.dat`_ errors are added artificially simply for fitting to work.
@@ -79,7 +79,9 @@ while corresponding ``<data_name>`` files are for plotting like so:
 Lattice data
 ------------
 
-Lattice data files are stored in the ``lattice`` directory.
+Lattice data files are stored in the `lattice`_ directory.
+
+.. _lattice: http://github.com/neuton/gg-lat/blob/master/lattice
 
 
 Indices and tables
